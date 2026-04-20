@@ -335,6 +335,41 @@ export default function App() {
     );
   }
 
+  //手机端legend
+  function MobileLegend({ payload }) {
+    if (!payload) return null;
+  
+    const unique = [];
+    const seen = new Set();
+  
+    payload.forEach((item) => {
+      const raw = item.value || "";
+      const label = raw.includes("_") ? raw.split("_")[1] : raw;
+  
+      if (!seen.has(label)) {
+        seen.add(label);
+        unique.push({
+          ...item,
+          cleanLabel: capitalize(label),
+        });
+      }
+    });
+  
+    return (
+      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+        {unique.map((entry, index) => (
+          <div key={index} className="flex items-center gap-2">
+            <span
+              className="inline-block h-3 w-3 rounded-sm"
+              style={{ backgroundColor: entry.color }}
+            />
+            <span className="text-slate-600">{entry.cleanLabel}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   function CustomTooltip({ active, payload, label, chartData }) {
     if (!active || !payload || payload.length === 0) return null;
   
@@ -615,7 +650,7 @@ export default function App() {
                     cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
                     content={<CustomTooltip chartData={chartData} />}
                   />
-                  <Legend content={<CustomLegend />} />
+                  <Legend content={<MobileLegend />} />
 
                     <Bar
                       dataKey={`${mobileProperty}_repair`}
