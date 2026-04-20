@@ -582,11 +582,11 @@ export default function App() {
                 </div>)
                 : (
               <div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight" style={{ height: 320 }}>
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" >
                   <BarChart width="100%" 
                   data={chartData}
                   barGap={8}
-                  margin={{ top: 12, right: 2, left: 2, bottom: 8 }}>
+                  margin={{ top: 12, right: 2, left:0, bottom: 8 }}>
                     {console.log(chartData)}
                     <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
                     <XAxis 
@@ -594,13 +594,14 @@ export default function App() {
                     dataKey="month" />
                     <YAxis 
                     tick={{ fill: "#64748b", fontSize: 10 }}
-                    tickFormatter={(v) => `$${v}`} />
+                    tickFormatter={(v) => `$${v}`} 
+                    width={35}/>
                     <Tooltip
                     shared={false}
                     cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
                     content={<CustomTooltip chartData={chartData} />}
                   />
-                  <Legend content={<MobileLegend />} />
+                  <Legend content={<MobileLegend />}/>
 
                     <Bar
                       dataKey={`${mobileProperty}_repair`}
