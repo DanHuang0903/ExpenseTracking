@@ -447,62 +447,8 @@ export default function App() {
       </div>
     );
   }
-  // function CustomTooltip({ active, payload, label, hoveredProperty }) {
-  //   if (!active || !label || !hoveredProperty) return null;
-  
-  //   const property = hoveredProperty === "luna" ? "Luna" : "Jefferson";
-  
-  //   const items = (payload || [])
-  //     .filter((entry) => {
-  //       if (!entry || !entry.dataKey) return false;
-  //       return (
-  //         entry.dataKey.startsWith(`${hoveredProperty}_`) &&
-  //         Number(entry.value) > 0
-  //       );
-  //     })
-  //     .map((entry) => ({
-  //       ...entry,
-  //       category: entry.dataKey.split("_")[1],
-  //     }));
-  
-  //   if (items.length === 0) return null;
-  
-  //   const total = items.reduce((sum, item) => sum + Number(item.value || 0), 0);
-  
-  //   return (
-  //     <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
-  //       <div className="mb-1 text-sm font-semibold text-slate-800">{label}</div>
-  //       <div className="mb-2 text-xs text-slate-500">{property}</div>
-  
-  //       <div className="space-y-1 text-sm">
-  //         {items.map((entry, index) => (
-  //           <div key={index} className="flex items-center justify-between gap-4">
-  //             <span className="flex items-center gap-2">
-  //               <span
-  //                 className="inline-block h-2.5 w-2.5 rounded-full"
-  //                 style={{ backgroundColor: entry.color }}
-  //               />
-  //               <span className="capitalize text-slate-700">
-  //                 {entry.category}
-  //               </span>
-  //             </span>
-  //             <span className="font-medium text-slate-900">
-  //               ${Number(entry.value).toLocaleString()}
-  //             </span>
-  //           </div>
-  //         ))}
-  //       </div>
-  
-  //       <div className="mt-2 border-t border-slate-200 pt-2 flex items-center justify-between text-sm">
-  //         <span className="text-slate-500">Total</span>
-  //         <span className="font-semibold text-slate-900">
-  //           ${total.toLocaleString()}
-  //         </span>
-  //       </div>
-  //     </div>
-  //   );
-  // }
 
+//判断手机端
   function useIsMobile() {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
@@ -640,11 +586,15 @@ export default function App() {
                   <BarChart width="100%" 
                   data={chartData}
                   barGap={8}
-                  margin={{ top: 12, right: 16, left: 8, bottom: 8 }}>
+                  margin={{ top: 12, right: 2, left: 2, bottom: 8 }}>
                     {console.log(chartData)}
                     <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis tickFormatter={(v) => `$${v}`} />
+                    <XAxis 
+                    tick={{ fill: "#64748b", fontSize: 10 }}
+                    dataKey="month" />
+                    <YAxis 
+                    tick={{ fill: "#64748b", fontSize: 10 }}
+                    tickFormatter={(v) => `$${v}`} />
                     <Tooltip
                     shared={false}
                     cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
