@@ -863,10 +863,10 @@ export default function App() {
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow">
-            <h2 className="mb-2 text-lg font-semibold">
+            <h2 className="mb-1 text-lg font-semibold">
               Records ({filteredData.length})
             </h2>
-            {isMobile? <p className="text-xs text-slate-400 mb-3 md:hidden">
+            {isMobile? <p className="text-xs text-slate-400 mb-4 md:hidden">
               ← Swipe to view more →
             </p> : <></>}
             
