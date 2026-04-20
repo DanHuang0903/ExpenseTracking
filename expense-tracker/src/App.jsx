@@ -735,7 +735,7 @@ export default function App() {
                 </div>)
                 : (
               <div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight" style={{ height: 320 }}>
-                <ResponsiveContainer width="100%" height="100%" >
+                <ResponsiveContainer width="100%" height={360} >
                   <BarChart width="100%" 
                   data={chartData}
                   barGap={8}
