@@ -866,13 +866,17 @@ export default function App() {
             <h2 className="mb-4 text-lg font-semibold">
               Records ({filteredData.length})
             </h2>
+            {isMobile? <p className="text-xs text-slate-400 mb-1 md:hidden">
+              ← Swipe to view more →
+            </p> : <></>}
+            
          <div className="relative">
             {/* 左渐变 */}
             <div className="pointer-events-none absolute left-0 top-0 h-full w-4 bg-gradient-to-r from-white to-transparent z-10" />
 
             {/* 右渐变 */}
             <div className="pointer-events-none absolute right-0 top-0 h-full w-4 bg-gradient-to-l from-white to-transparent z-10" />
-            <div className="overflow-auto p-1">
+            <div className="overflow-x-auto p-1">
             <table className="min-w-full border-separate border-spacing-y-1 text-left text-sm">
                 <thead>
                   <tr className="border-b bg-slate-50">
