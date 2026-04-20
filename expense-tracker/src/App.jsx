@@ -758,7 +758,7 @@ export default function App() {
 
 
           {/*Filter*/}
-          <div className="mb-6 rounded-2xl bg-white p-5 shadow">
+          <div className="mb-6 rounded-2xl bg-white p-5 shadow no-tap-highlight">
             <h2 className="mb-4 text-lg font-semibold">Filters</h2>
 
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
@@ -866,19 +866,24 @@ export default function App() {
             <h2 className="mb-4 text-lg font-semibold">
               Records ({filteredData.length})
             </h2>
+         <div className="relative">
+            {/* 左渐变 */}
+            <div className="pointer-events-none absolute left-0 top-0 h-full w-4 bg-gradient-to-r from-white to-transparent z-10" />
 
+            {/* 右渐变 */}
+            <div className="pointer-events-none absolute right-0 top-0 h-full w-4 bg-gradient-to-l from-white to-transparent z-10" />
             <div className="overflow-auto p-1">
             <table className="min-w-full border-separate border-spacing-y-1 text-left text-sm">
                 <thead>
                   <tr className="border-b bg-slate-50">
                     <th className="px-4 py-3">Date</th>
                     <th className="px-4 py-3">Property</th>
-                    <th className="px-4 py-3">Buyer</th>
+                    <th className="px-4 py-3">Cost</th>
+                    <th className="px-4 py-3">Category</th>
                     <th className="px-4 py-3">Content</th>
                     <th className="px-4 py-3">Online Order</th>
                     <th className="px-4 py-3">Carrier</th>
-                    <th className="px-4 py-3">Cost</th>
-                    <th className="px-4 py-3">Category</th>
+                    <th className="px-4 py-3">Buyer</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -928,7 +933,16 @@ export default function App() {
                               : "text-slate-500"
                           }`}
                         >
-                          {capitalize(item.buyer)}
+                          {formatCurrency(item.cost)}
+                        </td>
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
+                          {capitalize(item.category) || "-"}
                         </td>
                         <td
                           className={`px-4 py-3 transition-colors duration-150 ${
@@ -939,6 +953,7 @@ export default function App() {
                         >
                           {item.content || "-"}
                         </td>
+                        
                         <td
                           className={`px-4 py-3 transition-colors duration-150 ${
                             activeRowId === item.id
@@ -964,22 +979,14 @@ export default function App() {
                               : "text-slate-500"
                           }`}
                         >
-                          {formatCurrency(item.cost)}
-                        </td>
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {capitalize(item.category) || "-"}
+                          {capitalize(item.buyer)}
                         </td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
+            </div>
             </div>
           </div>
         </>
