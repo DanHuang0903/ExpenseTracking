@@ -749,7 +749,7 @@ export default function App() {
 
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
               <div>
-                <label className="mb-1 block text-sm font-medium">Property</label>
+                <label className="mb-1 block text-xs font-medium">Property</label>
                 <select
                   value={propertyFilter}
                   onChange={(e) => setPropertyFilter(e.target.value)}
@@ -778,7 +778,7 @@ export default function App() {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium">Category</label>
+                <label className="mb-1 block text-xs font-medium">Category</label>
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
@@ -795,7 +795,7 @@ export default function App() {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium">Online Order</label>
+                <label className="mb-1 block text-xs font-medium">Online Order</label>
                 <select
                   value={onlineOrder}
                   onChange={(e) => setOnlineOrder(e.target.value)}
@@ -808,7 +808,7 @@ export default function App() {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium">Buyer</label>
+                <label className="mb-1 block text-xs font-medium">Buyer</label>
                 <select
                   value={buyerFilter}
                   onChange={(e) => setBuyerFilter(e.target.value)}
@@ -821,7 +821,7 @@ export default function App() {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium">Cost</label>
+                <label className="mb-1 block text-xs font-medium">Cost</label>
                 <select
                   value={costBucket}
                   onChange={(e) => setCostBucket(e.target.value)}
@@ -836,7 +836,7 @@ export default function App() {
               </div>
 
               <div className="col-span-2 md:col-span-2">
-                <label className="mb-1 block text-sm font-medium">Keyword Search</label>
+                <label className="mb-1 block text-xs font-medium">Keyword Search</label>
                 <input
                   type="text"
                   value={keyword}
@@ -885,28 +885,28 @@ export default function App() {
                             setActiveRowId((prev) => (prev === item.id ? null : item.id))
                           }
                         >
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {item.date ? formatDateShort(item.date) : "-"}
                         </td>
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {capitalize(item.property)}
                         </td>
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {capitalize(item.buyer)}
                         </td>
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {item.content || "-"}
                         </td>
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {capitalize(item.onlineOrder)}
                         </td>
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {item.carrier || "-"}
                         </td>
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {formatCurrency(item.cost)}
                         </td>
-                        <td className="px-4 py-3 text-slate-550">
+                        <td className="px-4 py-3 text-slate-500">
                           {capitalize(item.category) || "-"}
                         </td>
                       </tr>
