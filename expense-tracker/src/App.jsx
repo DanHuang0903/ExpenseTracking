@@ -79,6 +79,14 @@ function formatMonth(date) {
   return `${y}-${m}`;
 }
 
+//处理table里面的日期，去掉年份
+function formatDateShort(date) {
+  if (!date) return "";
+  const m = String(date.getMonth() + 1);
+  const d = String(date.getDate());
+  return `${m}/${d}`;
+}
+
 function matchesDateRange(date, rangeValue) {
   if (rangeValue === "all") return true;
   if (!date) return false;
@@ -122,8 +130,10 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  
   const [activeRowId, setActiveRowId] = useState(null);
   const [propertyFilter, setPropertyFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [dateRange, setDateRange] = useState("all");
   const [onlineOrder, setOnlineOrder] = useState("all");
   const [buyerFilter, setBuyerFilter] = useState("all");
@@ -200,8 +210,13 @@ export default function App() {
     fetchData();
   }, []);
 
+
+//判断filter的选项
   const filteredData = useMemo(() => {
     return data.filter((item) => {
+      const categoryOk =
+        categoryFilter === "all" ? true : item.category === categoryFilter;
+
       const propertyOk =
         propertyFilter === "all" ? true : item.property === propertyFilter;
 
@@ -221,26 +236,51 @@ export default function App() {
           : item.searchText.includes(keyword.trim().toLowerCase()) ||
             item.dateLabel.includes(keyword.trim());
 
-      return propertyOk && dateOk && onlineOk && buyerOk && costOk && keywordOk;
+      return propertyOk && categoryOk && dateOk && onlineOk && buyerOk && costOk && keywordOk;
     });
-  }, [data, propertyFilter, dateRange, onlineOrder, buyerFilter, costBucket, keyword]);
+  }, [data, propertyFilter, categoryFilter, dateRange, onlineOrder, buyerFilter, costBucket, keyword]);
 
+  //跟踪最后日期
+  const lastDate = useMemo(() => {
+    if (filteredData.length === 0) return null;
+  
+    return filteredData.reduce((latest, item) => {
+      if (!item.date) return latest;
+      if (!latest) return item.date;
+      return item.date > latest ? item.date : latest;
+    }, null);
+  }, [filteredData]);
+
+  //规范日期显示格式
+  function formatDateRange(date) {
+    if (!date) return "";
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    return `${y}-${m}-${d}`;
+  }
+
+
+//算总数
   const totalAll = useMemo(() => {
     return filteredData.reduce((sum, item) => sum + item.cost, 0);
   }, [filteredData]);
 
+ //算luna总数 
   const totalLuna = useMemo(() => {
     return filteredData
       .filter((item) => item.property === "luna")
       .reduce((sum, item) => sum + item.cost, 0);
   }, [filteredData]);
 
+  //算jefferson总数
   const totalJefferson = useMemo(() => {
     return filteredData
       .filter((item) => item.property === "jefferson")
       .reduce((sum, item) => sum + item.cost, 0);
   }, [filteredData]);
 
+  //按照category算总数
   const totalsByCategory = useMemo(() => {
     const totals = {
       repair: 0,
@@ -376,6 +416,8 @@ export default function App() {
     );
   }
 
+
+//自定义的tooltip
   function CustomTooltip({ active, payload, label, chartData }) {
     if (!active || !payload || payload.length === 0) return null;
   
@@ -471,10 +513,36 @@ export default function App() {
   }
   const isMobile = useIsMobile();
 
+
+
+/////////////////////////////////////////////
+//                  UI                     //
+/////////////////////////////////////////////
   return (
     <div className="min-h-screen bg-slate-50 text-slate-750 p-8">
-      <h1 className="text-4xl font-semibold text-slate-750 tracking-tight mb-3">Expense Tracker</h1>
-      <p className="text-lg text-slate-500 mb-6">2026 - 2027</p>
+      <div className="mb-6 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-700 p-6 text-white shadow">
+        <div className="flex items-end justify-between flex-wrap gap-3">
+          
+          <div>
+            <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
+              Expense Tracker
+            </h1>
+            <p className="text-sm text-slate-300 mt-1">
+              Property spending overview · 2026–2027
+            </p>
+          </div>
+
+          <div className="flex gap-2 text-sm">
+            <span className="rounded-full bg-white/10 px-3 py-1">
+              Luna
+            </span>
+            <span className="rounded-full bg-white/10 px-3 py-1">
+              Jefferson
+            </span>
+          </div>
+
+        </div>
+      </div>
       {loading && <p>Loading...</p>}
       {error && <p className="mb-4 text-red-600">{error}</p>}
 
@@ -484,32 +552,50 @@ export default function App() {
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">All Properties Total</p>
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalAll)}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
             </div>
 
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">Luna Total</p>
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalLuna)}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
             </div>
 
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">Jefferson Total</p>
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalJefferson)}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
             </div>
           </div>}
-          {isMobile && (<div className="mb-6 grid gap-4 ">
+          {isMobile && (<div className="mb-6 grid grid-cols-2 gap-4 ">
             <div className="rounded-lg bg-white p-5 shadow">
               <p className="text-sm text-slate-500">All Properties Total</p>
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalAll)}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
             </div>
 
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">Luna Total</p>
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalLuna)}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
             </div>
 
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">Jefferson Total</p>
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalJefferson)}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
             </div>
           </div>)}
 
@@ -644,10 +730,12 @@ export default function App() {
             </div>)}
           </div>
 
+
+          {/*Filter*/}
           <div className="mb-6 rounded-2xl bg-white p-5 shadow">
             <h2 className="mb-4 text-lg font-semibold">Filters</h2>
 
-            <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
               <div>
                 <label className="mb-1 block text-sm font-medium">Property</label>
                 <select
@@ -663,17 +751,34 @@ export default function App() {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium">Time</label>
+                <label className="mb-1 block text-xs font-medium">Time</label>
                 <select
                   value={dateRange}
                   onChange={(e) => setDateRange(e.target.value)}
-                  className="w-full rounded-lg border p-2 text-slate-500"
+                  className="w-full rounded-lg border p-1.5 text-slate-500"
                 >
                   <option value="all">All time</option>
                   <option value="1m">Within 1 month</option>
                   <option value="3m">Within 3 months</option>
                   <option value="6m">Within 6 months</option>
                   <option value="12m">Within 12 months</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium">Category</label>
+                <select
+                  value={categoryFilter}
+                  onChange={(e) => setCategoryFilter(e.target.value)}
+                  className="w-full rounded-lg border p-2 text-slate-500"
+                >
+                  <option value="all">All</option>
+                  <option value="repair">Repair</option>
+                  <option value="supply">Supply</option>
+                  <option value="cleaning">Cleaning</option>
+                  <option value="maintenance">Maintenance</option>
+                  <option value="lawncare">Lawncare</option>
+                  <option value="loan">Loan</option>
                 </select>
               </div>
 
@@ -718,7 +823,7 @@ export default function App() {
                 </select>
               </div>
 
-              <div>
+              <div className="col-span-2 md:col-span-1">
                 <label className="mb-1 block text-sm font-medium">Keyword Search</label>
                 <input
                   type="text"
@@ -754,8 +859,10 @@ export default function App() {
                   {filteredData.map((item) => (
                     <tr
                     key={item.id}
-                    className={`border-b transition-colors ${
-                      activeRowId === item.id ? "bg-slate-100" : "hover:bg-slate-50"
+                    className={`border-b border-slate-100 transition-shadow duration-200 ${
+                      activeRowId === item.id
+                        ? "shadow-md bg-white relative z-10"
+                        : "hover:shadow-sm"
                     }`}
                     onMouseEnter={() => setActiveRowId(item.id)}
                     onMouseLeave={() => setActiveRowId(null)}
@@ -763,7 +870,9 @@ export default function App() {
                       setActiveRowId((prev) => (prev === item.id ? null : item.id))
                     }
                   >
-                      <td className="px-4 py-3 text-slate-550">{item.dateLabel || "-"}</td>
+                      <td className="px-4 py-3 text-slate-550">
+                        {item.date ? formatDateShort(item.date) : "-"}
+                      </td>
                       <td className="px-4 py-3 text-slate-550">{capitalize(item.property)}</td>
                       <td className="px-4 py-3 text-slate-550">{capitalize(item.buyer)}</td>
                       <td className="px-4 py-3 text-slate-550">{item.content || "-"}</td>
