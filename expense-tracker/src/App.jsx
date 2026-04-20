@@ -876,8 +876,12 @@ export default function App() {
                           key={item.id}
                           className={`border-b transition-all duration-200 ${
                             activeRowId === item.id
-                              ? "shadow-md bg-white -translate-y-[1px] relative z-10"
-                              : "hover:shadow-sm hover:-translate-y-[0.5px]"
+                              ? isMobile
+                                ? "shadow-[0_12px_32px_rgba(15,23,42,0.18)] bg-slate-50 scale-[1.01]"
+                                : "shadow-md bg-white -translate-y-[1px] relative z-10"
+                              : !isMobile
+                                ? "hover:shadow-sm hover:-translate-y-[0.5px]"
+                                : ""
                           }`}
                           onMouseEnter={() => setActiveRowId(item.id)}
                           onMouseLeave={() => setActiveRowId(null)}
