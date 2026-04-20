@@ -751,7 +751,7 @@ export default function App() {
                     tickFormatter={(v) => `$${v}`} 
                     axisLine={false}
                     tickLine={false}
-                    width={30}/>
+                    width={28}/>
                     <Tooltip
                     shared={false}
                     cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
