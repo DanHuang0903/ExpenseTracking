@@ -260,6 +260,13 @@ export default function App() {
     return `${y}-${m}-${d}`;
   }
 
+  //点击table效果
+  function getRowCellClass(isActive) {
+    return `px-4 py-3 text-slate-500 bg-white transition-colors duration-150 ${
+      isActive ? "bg-slate-50 text-slate-700" : ""
+    }`;
+  }
+
 
 //算总数
   const totalAll = useMemo(() => {
@@ -519,7 +526,7 @@ export default function App() {
 //                  UI                     //
 /////////////////////////////////////////////
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-750 p-8">
+    <div className="min-h-screen bg-slate-50 text-slate-750 px-4 py-4 md:px-6 md:py-6">
       <div className="mb-6 rounded-2xl bg-gradient-to-r from-slate-900 to-slate-700 p-6 text-white shadow">
         <div className="flex items-end justify-between flex-wrap gap-3">
           
@@ -628,17 +635,19 @@ export default function App() {
                   </div>
                 )}
 
-            {!isMobile ? (<div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight">
-              <ResponsiveContainer width="100%" aspect={2.2} height={600}>
+            {!isMobile ? (<div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight" >
+              <ResponsiveContainer width="100%" height={600} >
                  <BarChart
-                  width="100%" 
                   data={chartData}
                   barGap={8}
-                  margin={{ top: 12, right: 16, left: 8, bottom: 8 }}
+                  barCategoryGap="18%"
+                  margin={{ top: 12, right: 18, left: 0, bottom: 8 }}
                 >
                   <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                   <XAxis
                     dataKey="month"
+                    interval={0}
+                    padding={{ left: 8, right: 8 }}
                     tick={{ fill: "#64748b", fontSize: 12 }}
                     axisLine={{ stroke: "#cbd5e1" }}
                     tickLine={false}
@@ -683,10 +692,13 @@ export default function App() {
                     <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                     <XAxis 
                     tick={{ fill: "#64748b", fontSize: 10 }}
+                    tickLine={false}
                     dataKey="month" />
                     <YAxis 
                     tick={{ fill: "#64748b", fontSize: 10 }}
                     tickFormatter={(v) => `$${v}`} 
+                    axisLine={false}
+                    tickLine={false}
                     width={35}/>
                     <Tooltip
                     shared={false}
@@ -741,7 +753,7 @@ export default function App() {
                 <select
                   value={propertyFilter}
                   onChange={(e) => setPropertyFilter(e.target.value)}
-                  className="w-full rounded-lg border p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
                 >
                   <option value="all">All</option>
                   {["luna", "jefferson"].map(p => (
@@ -755,7 +767,7 @@ export default function App() {
                 <select
                   value={dateRange}
                   onChange={(e) => setDateRange(e.target.value)}
-                  className="w-full rounded-lg border p-1.5 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
                 >
                   <option value="all">All time</option>
                   <option value="1m">Within 1 month</option>
@@ -770,7 +782,7 @@ export default function App() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="w-full rounded-lg border p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
                 >
                   <option value="all">All</option>
                   <option value="repair">Repair</option>
@@ -787,7 +799,7 @@ export default function App() {
                 <select
                   value={onlineOrder}
                   onChange={(e) => setOnlineOrder(e.target.value)}
-                  className="w-full rounded-lg border p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
                 >
                   <option value="all">All</option>
                   <option value="yes">Yes</option>
@@ -800,7 +812,7 @@ export default function App() {
                 <select
                   value={buyerFilter}
                   onChange={(e) => setBuyerFilter(e.target.value)}
-                  className="w-full rounded-lg border p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
                 >
                   <option value="all">All</option>
                   <option value="maggie">Maggie</option>
@@ -813,7 +825,7 @@ export default function App() {
                 <select
                   value={costBucket}
                   onChange={(e) => setCostBucket(e.target.value)}
-                  className="w-full rounded-lg border p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
                 >
                   <option value="any">Any</option>
                   <option value="lte50">$50 or less</option>
@@ -823,14 +835,14 @@ export default function App() {
                 </select>
               </div>
 
-              <div className="col-span-2 md:col-span-1">
+              <div className="col-span-2 md:col-span-2">
                 <label className="mb-1 block text-sm font-medium">Keyword Search</label>
                 <input
                   type="text"
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="content, date, carrier..."
-                  className="w-full rounded-lg border p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
                 />
               </div>
             </div>
@@ -841,8 +853,8 @@ export default function App() {
               Records ({filteredData.length})
             </h2>
 
-            <div className="overflow-auto">
-              <table className="min-w-full text-left text-sm">
+            <div className="overflow-auto p-1">
+            <table className="min-w-full border-separate border-spacing-y-1 text-left text-sm">
                 <thead>
                   <tr className="border-b bg-slate-50">
                     <th className="px-4 py-3">Date</th>
@@ -856,32 +868,50 @@ export default function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredData.map((item) => (
-                    <tr
-                    key={item.id}
-                    className={`border-b border-slate-100 transition-shadow duration-200 ${
-                      activeRowId === item.id
-                        ? "shadow-md bg-white relative z-10"
-                        : "hover:shadow-sm"
-                    }`}
-                    onMouseEnter={() => setActiveRowId(item.id)}
-                    onMouseLeave={() => setActiveRowId(null)}
-                    onClick={() =>
-                      setActiveRowId((prev) => (prev === item.id ? null : item.id))
-                    }
-                  >
-                      <td className="px-4 py-3 text-slate-550">
-                        {item.date ? formatDateShort(item.date) : "-"}
-                      </td>
-                      <td className="px-4 py-3 text-slate-550">{capitalize(item.property)}</td>
-                      <td className="px-4 py-3 text-slate-550">{capitalize(item.buyer)}</td>
-                      <td className="px-4 py-3 text-slate-550">{item.content || "-"}</td>
-                      <td className="px-4 py-3 text-slate-550">{capitalize(item.onlineOrder)}</td>
-                      <td className="px-4 py-3 text-slate-550">{item.carrier || "-"}</td>
-                      <td className="px-4 py-3 text-slate-550">{formatCurrency(item.cost)}</td>
-                      <td className="px-4 py-3 text-slate-550">{capitalize(item.category) || "-"}</td>
-                    </tr>
-                  ))}
+                  {filteredData.map((item) => {
+                    const isActive = activeRowId === item.id;
+
+                    return (
+                      <tr
+                          key={item.id}
+                          className={`border-b transition-all duration-200 ${
+                            activeRowId === item.id
+                              ? "shadow-md bg-white -translate-y-[1px] relative z-10"
+                              : "hover:shadow-sm hover:-translate-y-[0.5px]"
+                          }`}
+                          onMouseEnter={() => setActiveRowId(item.id)}
+                          onMouseLeave={() => setActiveRowId(null)}
+                          onClick={() =>
+                            setActiveRowId((prev) => (prev === item.id ? null : item.id))
+                          }
+                        >
+                        <td className="px-4 py-3 text-slate-550">
+                          {item.date ? formatDateShort(item.date) : "-"}
+                        </td>
+                        <td className="px-4 py-3 text-slate-550">
+                          {capitalize(item.property)}
+                        </td>
+                        <td className="px-4 py-3 text-slate-550">
+                          {capitalize(item.buyer)}
+                        </td>
+                        <td className="px-4 py-3 text-slate-550">
+                          {item.content || "-"}
+                        </td>
+                        <td className="px-4 py-3 text-slate-550">
+                          {capitalize(item.onlineOrder)}
+                        </td>
+                        <td className="px-4 py-3 text-slate-550">
+                          {item.carrier || "-"}
+                        </td>
+                        <td className="px-4 py-3 text-slate-550">
+                          {formatCurrency(item.cost)}
+                        </td>
+                        <td className="px-4 py-3 text-slate-550">
+                          {capitalize(item.category) || "-"}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
