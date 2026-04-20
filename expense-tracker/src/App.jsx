@@ -889,28 +889,76 @@ export default function App() {
                             setActiveRowId((prev) => (prev === item.id ? null : item.id))
                           }
                         >
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {item.date ? formatDateShort(item.date) : "-"}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {capitalize(item.property)}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {capitalize(item.buyer)}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {item.content || "-"}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {capitalize(item.onlineOrder)}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {item.carrier || "-"}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {formatCurrency(item.cost)}
                         </td>
-                        <td className="px-4 py-3 text-slate-500">
+                        <td
+                          className={`px-4 py-3 transition-colors duration-150 ${
+                            activeRowId === item.id
+                              ? "text-slate-550"
+                              : "text-slate-500"
+                          }`}
+                        >
                           {capitalize(item.category) || "-"}
                         </td>
                       </tr>
