@@ -122,6 +122,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [activeRowId, setActiveRowId] = useState(null);
   const [propertyFilter, setPropertyFilter] = useState("all");
   const [dateRange, setDateRange] = useState("all");
   const [onlineOrder, setOnlineOrder] = useState("all");
@@ -129,6 +130,11 @@ export default function App() {
   const [costBucket, setCostBucket] = useState("any");
   const [keyword, setKeyword] = useState("");
   const [mobileProperty, setMobileProperty] = useState("luna");
+  useEffect(() => {
+    if (propertyFilter === "luna" || propertyFilter === "jefferson") {
+      setMobileProperty(propertyFilter);
+    }
+  }, [propertyFilter]);
   const CATEGORY_COLORS = {
     repair: "#56aea3",
     supply: "#feaac2",
@@ -544,7 +550,7 @@ export default function App() {
                   barGap={8}
                   margin={{ top: 12, right: 16, left: 8, bottom: 8 }}
                 >
-                  <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
+                  <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                   <XAxis
                     dataKey="month"
                     tick={{ fill: "#64748b", fontSize: 12 }}
@@ -588,7 +594,7 @@ export default function App() {
                   barGap={8}
                   margin={{ top: 12, right: 2, left:0, bottom: 8 }}>
                     {console.log(chartData)}
-                    <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
+                    <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                     <XAxis 
                     tick={{ fill: "#64748b", fontSize: 10 }}
                     dataKey="month" />
@@ -746,7 +752,17 @@ export default function App() {
                 </thead>
                 <tbody>
                   {filteredData.map((item) => (
-                    <tr key={item.id} className="border-b">
+                    <tr
+                    key={item.id}
+                    className={`border-b transition-colors ${
+                      activeRowId === item.id ? "bg-slate-100" : "hover:bg-slate-50"
+                    }`}
+                    onMouseEnter={() => setActiveRowId(item.id)}
+                    onMouseLeave={() => setActiveRowId(null)}
+                    onClick={() =>
+                      setActiveRowId((prev) => (prev === item.id ? null : item.id))
+                    }
+                  >
                       <td className="px-4 py-3 text-slate-550">{item.dateLabel || "-"}</td>
                       <td className="px-4 py-3 text-slate-550">{capitalize(item.property)}</td>
                       <td className="px-4 py-3 text-slate-550">{capitalize(item.buyer)}</td>
