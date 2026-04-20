@@ -555,7 +555,7 @@ export default function App() {
 
       {!loading && !error && (
         <>
-          {!isMobile && <div className="mb-6 grid gap-4 md:grid-cols-3">
+          {!isMobile && <div className="mb-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">All Properties Total</p>
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalAll)}</p>
@@ -577,13 +577,20 @@ export default function App() {
               <p className="mt-2 text-2xl font-bold">{formatCurrency(totalJefferson)}</p>
               <p className="mt-1 text-xs text-slate-400">
                 2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-5 shadow">
+              <p className="text-sm text-slate-500">Total Records</p>
+              <p className="mt-2 text-2xl font-bold">{filteredData.length}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                Matching current filters
               </p>
             </div>
           </div>}
           {isMobile && (<div className="mb-6 grid grid-cols-2 gap-4 ">
             <div className="rounded-lg bg-white p-5 shadow">
               <p className="text-sm text-slate-500">All Properties Total</p>
-              <p className="mt-2 text-2xl font-bold">{formatCurrency(totalAll)}</p>
+              <p className="mt-2 text-xl font-bold">{formatCurrency(totalAll)}</p>
               <p className="mt-1 text-xs text-slate-400">
                 2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
               </p>
@@ -591,7 +598,7 @@ export default function App() {
 
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">Luna Total</p>
-              <p className="mt-2 text-2xl font-bold">{formatCurrency(totalLuna)}</p>
+              <p className="mt-2 text-xl font-bold">{formatCurrency(totalLuna)}</p>
               <p className="mt-1 text-xs text-slate-400">
                 2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
               </p>
@@ -599,9 +606,16 @@ export default function App() {
 
             <div className="rounded-2xl bg-white p-5 shadow">
               <p className="text-sm text-slate-500">Jefferson Total</p>
-              <p className="mt-2 text-2xl font-bold">{formatCurrency(totalJefferson)}</p>
+              <p className="mt-2 text-xl font-bold">{formatCurrency(totalJefferson)}</p>
               <p className="mt-1 text-xs text-slate-400">
                 2026-1-1 to {lastDate ? formatDateRange(lastDate) : "-"}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white p-5 shadow">
+              <p className="text-sm text-slate-500">Total Records</p>
+              <p className="mt-2 text-xl font-bold">{filteredData.length}</p>
+              <p className="mt-1 text-xs text-slate-400">
+                Matching current filters
               </p>
             </div>
           </div>)}
