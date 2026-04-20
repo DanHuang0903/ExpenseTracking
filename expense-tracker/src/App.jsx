@@ -805,7 +805,7 @@ export default function App() {
                 <select
                   value={propertyFilter}
                   onChange={(e) => setPropertyFilter(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500 text-sm"
                 >
                   <option value="all">All</option>
                   {["luna", "jefferson"].map(p => (
@@ -819,7 +819,7 @@ export default function App() {
                 <select
                   value={dateRange}
                   onChange={(e) => setDateRange(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500 text-sm"
                 >
                   <option value="all">All time</option>
                   <option value="1m">Within 1 month</option>
@@ -834,7 +834,7 @@ export default function App() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500 text-sm"
                 >
                   <option value="all">All</option>
                   <option value="repair">Repair</option>
@@ -851,7 +851,7 @@ export default function App() {
                 <select
                   value={onlineOrder}
                   onChange={(e) => setOnlineOrder(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500 text-sm"
                 >
                   <option value="all">All</option>
                   <option value="yes">Yes</option>
@@ -864,7 +864,7 @@ export default function App() {
                 <select
                   value={buyerFilter}
                   onChange={(e) => setBuyerFilter(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500 text-sm"
                 >
                   <option value="all">All</option>
                   <option value="maggie">Maggie</option>
@@ -877,7 +877,7 @@ export default function App() {
                 <select
                   value={costBucket}
                   onChange={(e) => setCostBucket(e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500 text-sm"
                 >
                   <option value="any">Any</option>
                   <option value="lte50">$50 or less</option>
@@ -894,31 +894,43 @@ export default function App() {
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="content, date, carrier..."
-                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500"
+                  className="w-full rounded-lg border border-slate-200 p-2 text-slate-500 text-sm"
                 />
               </div>
             </div>
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow">
-            <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
-            <h2 className="mb-1 text-lg font-semibold">
-              Records ({filteredData.length})
-            </h2>
+            <div className="mb-4 flex items-baseline justify-between gap-2 ">
+             <div className="">
+              {isMobile? 
+              <div>
+               <h2 className="text-lg font-semibold">Records</h2>
+               <button className="px-3 py-1 rounded-full text-xs bg-slate-900 text-white">{filteredData.length} records · after filters</button>
+                </div>
+                : <div className="flex items-baseline gap-2">
+                <h2 className="text-lg font-semibold">Records</h2>
+                <button className="px-3 py-1 rounded-full text-xs bg-slate-900 text-white">{filteredData.length} records · after filters</button>
+              </div>}
+             
+              </div> 
+            <div className="items-baseline">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="rounded-lg border border-slate-200 px-2 py-1 text-sm text-slate-600 bg-white "
+                className="rounded-lg border border-slate-200 px-4 py-1 text-sm text-slate-600 bg-white mb-4"
               >
                 <option value="date-desc">Newest</option>
                 <option value="date-asc">Oldest</option>
                 <option value="cost-desc">Most Expensive</option>
                 <option value="cost-asc">Least Expensive</option>
               </select>
-              {isMobile? <p className="text-xs text-slate-400 mb-4 md:hidden">
-              ← Swipe to view more →
-            </p> : <></>}
+              </div>
+              
             </div>
+            {isMobile? <p className="text-xs text-slate-400 mt-5 mb-1 md:hidden">
+                ← Swipe to view more →
+              </p> : <></>}
             
          <div className="relative">
             {/* 左渐变 */}
