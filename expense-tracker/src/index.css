@@ -1,0 +1,21 @@
+@import "tailwindcss";
+.no-tap-highlight {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.no-tap-highlight,
+.no-tap-highlight * {
+  outline: none;
+}
+.no-tap-highlight svg,
+.no-tap-highlight rect,
+.no-tap-highlight path,
+.no-tap-highlight g {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.no-tap-highlight *:focus,
+.no-tap-highlight *:active {
+  outline: none;
+  box-shadow: none;
+}
