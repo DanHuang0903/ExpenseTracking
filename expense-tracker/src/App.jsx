@@ -688,12 +688,12 @@ export default function App() {
                 )}
 
             {!isMobile ? (<div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight" >
-              <ResponsiveContainer width="100%" height={600} >
+              <ResponsiveContainer width="100%" height={500} >
                  <BarChart
                   data={chartData}
                   barGap={8}
                   barCategoryGap="18%"
-                  margin={{ top: 12, right: 18, left: 0, bottom: 8 }}
+                  margin={{ top: 12, right: 18, left: 10, bottom: 15 }}
                 >
                   <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                   <XAxis
@@ -734,12 +734,12 @@ export default function App() {
                 </ResponsiveContainer>
                 </div>)
                 : (
-              <div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight" style={{ height: 320 }}>
+              <div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight" style={{ height: 360 }}>
                 <ResponsiveContainer width="100%" height={360} >
                   <BarChart width="100%" 
                   data={chartData}
                   barGap={8}
-                  margin={{ top: 12, right: 2, left:10, bottom: 8 }}>
+                  margin={{ top: 12, right: 2, left:10, bottom: 12 }}>
                     {console.log(chartData)}
                     <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                     <XAxis 
