@@ -141,6 +141,43 @@ export default function App() {
   const [keyword, setKeyword] = useState("");
   const [sortBy, setSortBy] = useState("date-desc");
   const [mobileProperty, setMobileProperty] = useState("luna");
+
+const [activeChartPoint, setActiveChartPoint] = useState(null);
+
+function getPropertyKeyFromDataKey(dataKey) {
+  if (!dataKey || typeof dataKey !== "string") return null;
+  return dataKey.startsWith("luna_") ? "luna" : "jefferson";
+}
+
+function getBarHandlers(dataKey) {
+  const propertyKey = getPropertyKeyFromDataKey(dataKey);
+
+  return {
+    onMouseEnter: (entry) => {
+      if (!entry?.month || !propertyKey) return;
+      setActiveChartPoint({
+        month: entry.month,
+        propertyKey,
+      });
+    },
+    onMouseMove: (entry) => {
+      if (!entry?.month || !propertyKey) return;
+      setActiveChartPoint({
+        month: entry.month,
+        propertyKey,
+      });
+    },
+    onClick: (entry) => {
+      if (!entry?.month || !propertyKey) return;
+      setActiveChartPoint({
+        month: entry.month,
+        propertyKey,
+      });
+    },
+  };
+}
+
+  
   useEffect(() => {
     if (propertyFilter === "luna" || propertyFilter === "jefferson") {
       setMobileProperty(propertyFilter);
@@ -386,6 +423,11 @@ export default function App() {
     return Object.values(grouped).sort((a, b) => a.month.localeCompare(b.month));
   }, [filteredData]);
 
+  const activeChartRow = useMemo(() => {
+    if (!activeChartPoint?.month) return null;
+    return chartData.find((item) => item.month === activeChartPoint.month) || null;
+  }, [chartData, activeChartPoint]);
+
 
   function formatCurrency(value) {
     return new Intl.NumberFormat("en-US", {
@@ -463,83 +505,152 @@ export default function App() {
 
 
 //自定义的tooltip
-  function CustomTooltip({ active, payload, label, chartData }) {
-    if (!active || !payload || payload.length === 0) return null;
-  
-    const activeEntry = payload[0];
-    if (!activeEntry || typeof activeEntry.dataKey !== "string") return null;
-  
-    const propertyKey = activeEntry.dataKey.startsWith("luna_")
-      ? "luna"
-      : "jefferson";
-    const propertyLabel = propertyKey === "luna" ? "Luna" : "Jefferson";
-  
-    const month = activeEntry?.payload?.month || label;
-    if (!month) return null;
-  
-    const monthRow = chartData.find((item) => item.month === month);
-    if (!monthRow) return null;
-  
-    const categoryKeys = [
-      "repair",
-      "supply",
-      "cleaning",
-      "maintenance",
-      "lawncare",
-      "loan",
-    ];
-  
-    const items = categoryKeys
-      .map((category) => {
-        const value = Number(monthRow[`${propertyKey}_${category}`] || 0);
-        return {
-          category,
-          value,
-          color: CATEGORY_COLORS[category],
-        };
-      })
-      .filter((item) => item.value > 0);
-  
-    if (items.length === 0) return null;
-  
-    const total = items.reduce((sum, item) => sum + item.value, 0);
-  
-    return (
-      <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
-        <div className="mb-1 text-sm font-semibold text-slate-800">{month}</div>
-        <div className="mb-2 text-xs text-slate-500">{propertyLabel}</div>
-  
-        <div className="space-y-1 text-sm">
-          {items.map((item) => (
-            <div
-              key={item.category}
-              className="flex items-center justify-between gap-4"
-            >
-              <span className="flex items-center gap-2">
-                <span
-                  className="inline-block h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: item.color }}
-                />
-                <span className="capitalize text-slate-700">
-                  {item.category}
-                </span>
-              </span>
-              <span className="font-medium text-slate-900">
-                ${item.value.toLocaleString()}
-              </span>
-            </div>
-          ))}
-        </div>
-  
-        <div className="mt-2 flex items-center justify-between border-t border-slate-200 pt-2 text-sm">
-          <span className="text-slate-500">Total</span>
-          <span className="font-semibold text-slate-900">
-            ${total.toLocaleString()}
-          </span>
-        </div>
+function CustomTooltipCard({ row, propertyKey }) {
+  if (!row || !propertyKey) return null;
+
+  const propertyLabel = propertyKey === "luna" ? "Luna" : "Jefferson";
+
+  const categoryKeys = [
+    "repair",
+    "supply",
+    "cleaning",
+    "maintenance",
+    "lawncare",
+    "loan",
+  ];
+
+  const items = categoryKeys
+    .map((category) => {
+      const value = Number(row[`${propertyKey}_${category}`] || 0);
+      return {
+        category,
+        value,
+        color: CATEGORY_COLORS[category],
+      };
+    })
+    .filter((item) => item.value > 0);
+
+  if (items.length === 0) return null;
+
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+
+  return (
+    <div className="mt-3 rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
+      <div className="mb-1 text-sm font-semibold text-slate-800">
+        {row.month}
       </div>
-    );
-  }
+      <div className="mb-2 text-xs text-slate-500">
+        {propertyLabel}
+      </div>
+
+      <div className="space-y-1 text-sm">
+        {items.map((item) => (
+          <div
+            key={item.category}
+            className="flex items-center justify-between gap-4"
+          >
+            <span className="flex items-center gap-2">
+              <span
+                className="inline-block h-2.5 w-2.5 rounded-full"
+                style={{ backgroundColor: item.color }}
+              />
+              <span className="capitalize text-slate-700">
+                {item.category}
+              </span>
+            </span>
+            <span className="font-medium text-slate-900">
+              ${item.value.toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-2 flex items-center justify-between border-t border-slate-200 pt-2 text-sm">
+        <span className="text-slate-500">Total</span>
+        <span className="font-semibold text-slate-900">
+          ${total.toLocaleString()}
+        </span>
+      </div>
+    </div>
+  );
+}
+  // function CustomTooltip({ active, payload, label, chartData }) {
+  //   if (!active || !payload || payload.length === 0) return null;
+  
+  //   const activeEntry = payload[0];
+  //   if (!activeEntry || typeof activeEntry.dataKey !== "string") return null;
+  
+  //   const propertyKey = activeEntry.dataKey.startsWith("luna_")
+  //     ? "luna"
+  //     : "jefferson";
+  //   const propertyLabel = propertyKey === "luna" ? "Luna" : "Jefferson";
+  
+  //   const month = activeEntry?.payload?.month || label;
+  //   if (!month) return null;
+  
+  //   const monthRow = chartData.find((item) => item.month === month);
+  //   if (!monthRow) return null;
+  
+  //   const categoryKeys = [
+  //     "repair",
+  //     "supply",
+  //     "cleaning",
+  //     "maintenance",
+  //     "lawncare",
+  //     "loan",
+  //   ];
+  
+  //   const items = categoryKeys
+  //     .map((category) => {
+  //       const value = Number(monthRow[`${propertyKey}_${category}`] || 0);
+  //       return {
+  //         category,
+  //         value,
+  //         color: CATEGORY_COLORS[category],
+  //       };
+  //     })
+  //     .filter((item) => item.value > 0);
+  
+  //   if (items.length === 0) return null;
+  
+  //   const total = items.reduce((sum, item) => sum + item.value, 0);
+  
+  //   return (
+  //     <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
+  //       <div className="mb-1 text-sm font-semibold text-slate-800">{month}</div>
+  //       <div className="mb-2 text-xs text-slate-500">{propertyLabel}</div>
+  
+  //       <div className="space-y-1 text-sm">
+  //         {items.map((item) => (
+  //           <div
+  //             key={item.category}
+  //             className="flex items-center justify-between gap-4"
+  //           >
+  //             <span className="flex items-center gap-2">
+  //               <span
+  //                 className="inline-block h-2.5 w-2.5 rounded-full"
+  //                 style={{ backgroundColor: item.color }}
+  //               />
+  //               <span className="capitalize text-slate-700">
+  //                 {item.category}
+  //               </span>
+  //             </span>
+  //             <span className="font-medium text-slate-900">
+  //               ${item.value.toLocaleString()}
+  //             </span>
+  //           </div>
+  //         ))}
+  //       </div>
+  
+  //       <div className="mt-2 flex items-center justify-between border-t border-slate-200 pt-2 text-sm">
+  //         <span className="text-slate-500">Total</span>
+  //         <span className="font-semibold text-slate-900">
+  //           ${total.toLocaleString()}
+  //         </span>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
 //判断手机端
   function useIsMobile() {
@@ -687,19 +798,19 @@ export default function App() {
                   </div>
                 )}
 
-            {!isMobile ? (<div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight" >
+            {!isMobile ? (<div className="min-w-0 rounded-xl no-tap-highlight" >
               <ResponsiveContainer width="100%" height={500} >
                  <BarChart
                   data={chartData}
                   barGap={8}
                   barCategoryGap="18%"
-                  margin={{ top: 12, right: 18, left: 10, bottom: 15 }}
+                  margin={{ top: 12, right: 28, left: 10, bottom: 15 }}
                 >
                   <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                   <XAxis
                     dataKey="month"
                     interval={0}
-                    padding={{ left: 8, right: 8 }}
+                    padding={{ left: 8, right: 28 }}
                     tick={{ fill: "#64748b", fontSize: 12 }}
                     axisLine={{ stroke: "#cbd5e1" }}
                     tickLine={false}
@@ -710,28 +821,37 @@ export default function App() {
                     axisLine={false}
                     tickLine={false}
                   />
-                  <Tooltip
+                  {/*<Tooltip
                     shared={false}
+                    allowEscapeViewBox={{ x: true, y: true }}
+                    wrapperStyle={{ zIndex: 20 }}
                     cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
                     content={<CustomTooltip chartData={chartData} />}
-                  />
+                  />*/}
+                  
                   <Legend content={<CustomLegend />} />
 
-                  <Bar dataKey="luna_repair" name="Repair" stackId="luna" fill={CATEGORY_COLORS.repair} />
-                  <Bar dataKey="luna_supply" name="Supply" stackId="luna" fill={CATEGORY_COLORS.supply}/>
-                  <Bar dataKey="luna_cleaning" name="Cleaning" stackId="luna" fill={CATEGORY_COLORS.cleaning} />
-                  <Bar dataKey="luna_maintenance" name="Maintenance" stackId="luna" fill={CATEGORY_COLORS.maintenance} />
-                  <Bar dataKey="luna_lawncare" name="Lawncare" stackId="luna" fill={CATEGORY_COLORS.lawncare} />
-                  <Bar dataKey="luna_loan" name="Loan" stackId="luna" fill={CATEGORY_COLORS.loan} />
+                  <Bar dataKey="luna_repair" name="Repair" stackId="luna" fill={CATEGORY_COLORS.repair} {...getBarHandlers("luna_repair")}/>
+                  <Bar dataKey="luna_supply" name="Supply" stackId="luna" fill={CATEGORY_COLORS.supply} {...getBarHandlers("luna_supply")}/>
+                  <Bar dataKey="luna_cleaning" name="Cleaning" stackId="luna" fill={CATEGORY_COLORS.cleaning} {...getBarHandlers("luna_cleaning")}/>
+                  <Bar dataKey="luna_maintenance" name="Maintenance" stackId="luna" fill={CATEGORY_COLORS.maintenance} {...getBarHandlers("luna_maintenace")}/>
+                  <Bar dataKey="luna_lawncare" name="Lawncare" stackId="luna" fill={CATEGORY_COLORS.lawncare} {...getBarHandlers("luna_lawncare")}/>
+                  <Bar dataKey="luna_loan" name="Loan" stackId="luna" fill={CATEGORY_COLORS.loan} {...getBarHandlers("luna_loan")}/>
 
-                  <Bar dataKey="jefferson_repair" name="Repair" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.repair} />
-                  <Bar dataKey="jefferson_supply" name="Supply" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.supply} />
-                  <Bar dataKey="jefferson_cleaning" name="Cleaning" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.cleaning} />
-                  <Bar dataKey="jefferson_maintenance" name="Maintenance" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.maintenance} />
-                  <Bar dataKey="jefferson_lawncare" name="Lawncare" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.lawncare} />
-                  <Bar dataKey="jefferson_loan" name="Loan" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.loan} />
+                  <Bar dataKey="jefferson_repair" name="Repair" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.repair} {...getBarHandlers("jefferson_repair")}/>
+                  <Bar dataKey="jefferson_supply" name="Supply" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.supply} {...getBarHandlers("jefferson_supply")}/>
+                  <Bar dataKey="jefferson_cleaning" name="Cleaning" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.cleaning}  {...getBarHandlers("jefferson_cleaning")}/>
+                  <Bar dataKey="jefferson_maintenance" name="Maintenance" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.maintenance}  {...getBarHandlers("jefferson_maintenace")}/>
+                  <Bar dataKey="jefferson_lawncare" name="Lawncare" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.lawncare}  {...getBarHandlers("jefferson_lawncare")}/>
+                  <Bar dataKey="jefferson_loan" name="Loan" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.loan}  {...getBarHandlers("jefferson_loan")}/>
                 </BarChart>
                 </ResponsiveContainer>
+                {activeChartRow && activeChartPoint?.propertyKey && (
+                  <CustomTooltipCard
+                    row={activeChartRow}
+                    propertyKey={activeChartPoint.propertyKey}
+                  />
+                )}
                 </div>)
                 : (
               <div className="min-w-0 overflow-hidden rounded-xl no-tap-highlight">
@@ -752,45 +872,59 @@ export default function App() {
                     axisLine={false}
                     tickLine={false}
                     width={28}/>
-                    <Tooltip
+                    {
+                    /*<Tooltip
                     shared={false}
                     cursor={{ fill: "rgba(148, 163, 184, 0.08)" }}
                     content={<CustomTooltip chartData={chartData} />}
-                  />
+                  />*/
+                  }
                   <Legend content={<MobileLegend />}/>
 
                     <Bar
                       dataKey={`${mobileProperty}_repair`}
                       stackId="a"
                       fill={CATEGORY_COLORS.repair}
+                      {...getBarHandlers(`${mobileProperty}_repair`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_supply`}
                       stackId="a"
                       fill={CATEGORY_COLORS.supply}
+                      {...getBarHandlers(`${mobileProperty}_supply`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_cleaning`}
                       stackId="a"
                       fill={CATEGORY_COLORS.cleaning}
+                      {...getBarHandlers(`${mobileProperty}_cleaning`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_maintenance`}
                       stackId="a"
                       fill={CATEGORY_COLORS.maintenance}
+                      {...getBarHandlers(`${mobileProperty}_maintenance`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_lawncare`}
                       stackId="a"
                       fill={CATEGORY_COLORS.lawncare}
+                      {...getBarHandlers(`${mobileProperty}_lawncare`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_loan`}
                       stackId="a"
                       fill={CATEGORY_COLORS.loan}
+                      {...getBarHandlers(`${mobileProperty}_loan`)}
                     />
                   </BarChart>
               </ResponsiveContainer>
+              {activeChartRow && activeChartPoint?.propertyKey && (
+                <CustomTooltipCard
+                  row={activeChartRow}
+                  propertyKey={activeChartPoint.propertyKey}
+                />
+              )}
             </div>)}
           </div>
 
