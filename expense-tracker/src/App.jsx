@@ -139,6 +139,7 @@ export default function App() {
   const [buyerFilter, setBuyerFilter] = useState("all");
   const [costBucket, setCostBucket] = useState("any");
   const [keyword, setKeyword] = useState("");
+  const [sortBy, setSortBy] = useState("date-desc");
   const [mobileProperty, setMobileProperty] = useState("luna");
   useEffect(() => {
     if (propertyFilter === "luna" || propertyFilter === "jefferson") {
@@ -213,32 +214,69 @@ export default function App() {
 
 //判断filter的选项
   const filteredData = useMemo(() => {
-    return data.filter((item) => {
-      const categoryOk =
-        categoryFilter === "all" ? true : item.category === categoryFilter;
+      const filtered = data.filter((item) => {
+        const categoryOk =
+          categoryFilter === "all" ? true : item.category === categoryFilter;
 
-      const propertyOk =
-        propertyFilter === "all" ? true : item.property === propertyFilter;
+        const propertyOk =
+          propertyFilter === "all" ? true : item.property === propertyFilter;
 
-      const dateOk = matchesDateRange(item.date, dateRange);
+        const dateOk = matchesDateRange(item.date, dateRange);
 
-      const onlineOk =
-        onlineOrder === "all" ? true : item.onlineOrder === onlineOrder;
+        const onlineOk =
+          onlineOrder === "all" ? true : item.onlineOrder === onlineOrder;
 
-      const buyerOk =
-        buyerFilter === "all" ? true : item.buyer === buyerFilter;
+        const buyerOk =
+          buyerFilter === "all" ? true : item.buyer === buyerFilter;
 
-      const costOk = matchesCostBucket(item.cost, costBucket);
+        const costOk = matchesCostBucket(item.cost, costBucket);
 
-      const keywordOk =
-        keyword.trim() === ""
-          ? true
-          : item.searchText.includes(keyword.trim().toLowerCase()) ||
-            item.dateLabel.includes(keyword.trim());
+        const keywordOk =
+          keyword.trim() === ""
+            ? true
+            : item.searchText.includes(keyword.trim().toLowerCase()) ||
+              item.dateLabel.includes(keyword.trim());
 
-      return propertyOk && categoryOk && dateOk && onlineOk && buyerOk && costOk && keywordOk;
-    });
-  }, [data, propertyFilter, categoryFilter, dateRange, onlineOrder, buyerFilter, costBucket, keyword]);
+        return (
+          propertyOk &&
+          categoryOk &&
+          dateOk &&
+          onlineOk &&
+          buyerOk &&
+          costOk &&
+          keywordOk
+        );
+      });
+
+      // 排序逻辑
+      const sorted = [...filtered].sort((a, b) => {
+        if (sortBy === "date-desc") {
+          return (b.date?.getTime() || 0) - (a.date?.getTime() || 0);
+        }
+        if (sortBy === "date-asc") {
+          return (a.date?.getTime() || 0) - (b.date?.getTime() || 0);
+        }
+        if (sortBy === "cost-desc") {
+          return b.cost - a.cost;
+        }
+        if (sortBy === "cost-asc") {
+          return a.cost - b.cost;
+        }
+        return 0;
+      });
+
+      return sorted;
+    }, [
+      data,
+      propertyFilter,
+      categoryFilter,
+      dateRange,
+      onlineOrder,
+      buyerFilter,
+      costBucket,
+      keyword,
+      sortBy, 
+    ]);
 
   //跟踪最后日期
   const lastDate = useMemo(() => {
@@ -863,12 +901,24 @@ export default function App() {
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow">
+            <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
             <h2 className="mb-1 text-lg font-semibold">
               Records ({filteredData.length})
             </h2>
-            {isMobile? <p className="text-xs text-slate-400 mb-4 md:hidden">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="rounded-lg border border-slate-200 px-2 py-1 text-sm text-slate-600 bg-white "
+              >
+                <option value="date-desc">Newest</option>
+                <option value="date-asc">Oldest</option>
+                <option value="cost-desc">Most Expensive</option>
+                <option value="cost-asc">Least Expensive</option>
+              </select>
+              {isMobile? <p className="text-xs text-slate-400 mb-4 md:hidden">
               ← Swipe to view more →
             </p> : <></>}
+            </div>
             
          <div className="relative">
             {/* 左渐变 */}
