@@ -739,7 +739,7 @@ export default function App() {
                   <BarChart width="100%" 
                   data={chartData}
                   barGap={8}
-                  margin={{ top: 12, right: 2, left:0, bottom: 8 }}>
+                  margin={{ top: 12, right: 2, left:10, bottom: 8 }}>
                     {console.log(chartData)}
                     <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false}/>
                     <XAxis 
