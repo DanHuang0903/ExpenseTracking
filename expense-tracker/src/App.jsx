@@ -184,12 +184,12 @@ function getBarHandlers(dataKey) {
     }
   }, [propertyFilter]);
   const CATEGORY_COLORS = {
-    repair: "#56aea3",
-    supply: "#feaac2",
-    cleaning: "#bc87bf",
-    maintenance: "#91b6eb",
-    lawncare: "	#f36273",
-    loan: "#8fdbd8",
+    repair: "#b9a9c3",
+    supply: "#f0e79f",
+    cleaning: "#b4bacc",
+    maintenance: "#acd6df",
+    lawncare: "	#f1adac",
+    loan: "#95d598",
   };
 
   useEffect(() => {
@@ -504,6 +504,26 @@ function getBarHandlers(dataKey) {
   }
 
 
+  //自定义bar shadow
+  const CustomBar = (props) => {
+    const { x, y, width, height, fill } = props;
+  
+    return (
+      <g>
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          fill={fill}
+          style={{
+            filter: "drop-shadow(0px -2px 5px rgba(0,0,0,0.12))",
+          }}
+        />
+      </g>
+    );
+  };
+
 //自定义的tooltip
 function CustomTooltipCard({ row, propertyKey }) {
   if (!row || !propertyKey) return null;
@@ -779,7 +799,7 @@ function CustomTooltipCard({ row, propertyKey }) {
                       onClick={() => setMobileProperty("luna")}
                       className={`px-3 py-1 rounded-full text-sm ${
                         mobileProperty === "luna"
-                          ? "bg-slate-900 text-white"
+                          ? "bg-slate-900 text-white box-shadow"
                           : "bg-slate-200 text-slate-600"
                       }`}
                     >
@@ -831,19 +851,19 @@ function CustomTooltipCard({ row, propertyKey }) {
                   
                   <Legend content={<CustomLegend />} />
 
-                  <Bar dataKey="luna_repair" name="Repair" stackId="luna" fill={CATEGORY_COLORS.repair} {...getBarHandlers("luna_repair")}/>
-                  <Bar dataKey="luna_supply" name="Supply" stackId="luna" fill={CATEGORY_COLORS.supply} {...getBarHandlers("luna_supply")}/>
-                  <Bar dataKey="luna_cleaning" name="Cleaning" stackId="luna" fill={CATEGORY_COLORS.cleaning} {...getBarHandlers("luna_cleaning")}/>
-                  <Bar dataKey="luna_maintenance" name="Maintenance" stackId="luna" fill={CATEGORY_COLORS.maintenance} {...getBarHandlers("luna_maintenace")}/>
-                  <Bar dataKey="luna_lawncare" name="Lawncare" stackId="luna" fill={CATEGORY_COLORS.lawncare} {...getBarHandlers("luna_lawncare")}/>
-                  <Bar dataKey="luna_loan" name="Loan" stackId="luna" fill={CATEGORY_COLORS.loan} {...getBarHandlers("luna_loan")}/>
+                  <Bar dataKey="luna_repair" shape={<CustomBar/>} name="Repair" stackId="luna" fill={CATEGORY_COLORS.repair} {...getBarHandlers("luna_repair")}/>
+                  <Bar dataKey="luna_supply" shape={<CustomBar/>}  name="Supply" stackId="luna" fill={CATEGORY_COLORS.supply} {...getBarHandlers("luna_supply")}/>
+                  <Bar dataKey="luna_cleaning" shape={<CustomBar/>} name="Cleaning" stackId="luna" fill={CATEGORY_COLORS.cleaning} {...getBarHandlers("luna_cleaning")}/>
+                  <Bar dataKey="luna_maintenance" shape={<CustomBar/>} name="Maintenance" stackId="luna" fill={CATEGORY_COLORS.maintenance} {...getBarHandlers("luna_maintenace")}/>
+                  <Bar dataKey="luna_lawncare" shape={<CustomBar/>} name="Lawncare" stackId="luna" fill={CATEGORY_COLORS.lawncare} {...getBarHandlers("luna_lawncare")}/>
+                  <Bar dataKey="luna_loan" shape={<CustomBar/>} name="Loan" stackId="luna" fill={CATEGORY_COLORS.loan} {...getBarHandlers("luna_loan")}/>
 
-                  <Bar dataKey="jefferson_repair" name="Repair" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.repair} {...getBarHandlers("jefferson_repair")}/>
-                  <Bar dataKey="jefferson_supply" name="Supply" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.supply} {...getBarHandlers("jefferson_supply")}/>
-                  <Bar dataKey="jefferson_cleaning" name="Cleaning" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.cleaning}  {...getBarHandlers("jefferson_cleaning")}/>
-                  <Bar dataKey="jefferson_maintenance" name="Maintenance" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.maintenance}  {...getBarHandlers("jefferson_maintenace")}/>
-                  <Bar dataKey="jefferson_lawncare" name="Lawncare" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.lawncare}  {...getBarHandlers("jefferson_lawncare")}/>
-                  <Bar dataKey="jefferson_loan" name="Loan" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.loan}  {...getBarHandlers("jefferson_loan")}/>
+                  <Bar dataKey="jefferson_repair" shape={<CustomBar/>} name="Repair" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.repair} {...getBarHandlers("jefferson_repair")}/>
+                  <Bar dataKey="jefferson_supply" shape={<CustomBar/>} name="Supply" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.supply} {...getBarHandlers("jefferson_supply")}/>
+                  <Bar dataKey="jefferson_cleaning" shape={<CustomBar/>} name="Cleaning" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.cleaning}  {...getBarHandlers("jefferson_cleaning")}/>
+                  <Bar dataKey="jefferson_maintenance" shape={<CustomBar/>} name="Maintenance" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.maintenance}  {...getBarHandlers("jefferson_maintenace")}/>
+                  <Bar dataKey="jefferson_lawncare" shape={<CustomBar/>} name="Lawncare" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.lawncare}  {...getBarHandlers("jefferson_lawncare")}/>
+                  <Bar dataKey="jefferson_loan" shape={<CustomBar/>} name="Loan" stackId="jefferson" legendType="none" fill={CATEGORY_COLORS.loan}  {...getBarHandlers("jefferson_loan")}/>
                 </BarChart>
                 </ResponsiveContainer>
                 {activeChartRow && activeChartPoint?.propertyKey && (
@@ -883,36 +903,42 @@ function CustomTooltipCard({ row, propertyKey }) {
 
                     <Bar
                       dataKey={`${mobileProperty}_repair`}
+                      shape={<CustomBar/>} 
                       stackId="a"
                       fill={CATEGORY_COLORS.repair}
                       {...getBarHandlers(`${mobileProperty}_repair`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_supply`}
+                      shape={<CustomBar/>} 
                       stackId="a"
                       fill={CATEGORY_COLORS.supply}
                       {...getBarHandlers(`${mobileProperty}_supply`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_cleaning`}
+                      shape={<CustomBar/>} 
                       stackId="a"
                       fill={CATEGORY_COLORS.cleaning}
                       {...getBarHandlers(`${mobileProperty}_cleaning`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_maintenance`}
+                      shape={<CustomBar/>} 
                       stackId="a"
                       fill={CATEGORY_COLORS.maintenance}
                       {...getBarHandlers(`${mobileProperty}_maintenance`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_lawncare`}
+                      shape={<CustomBar/>} 
                       stackId="a"
                       fill={CATEGORY_COLORS.lawncare}
                       {...getBarHandlers(`${mobileProperty}_lawncare`)}
                     />
                     <Bar
                       dataKey={`${mobileProperty}_loan`}
+                      shape={<CustomBar/>} 
                       stackId="a"
                       fill={CATEGORY_COLORS.loan}
                       {...getBarHandlers(`${mobileProperty}_loan`)}
