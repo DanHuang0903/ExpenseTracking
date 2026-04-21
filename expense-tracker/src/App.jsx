@@ -1118,9 +1118,9 @@ function CustomTooltipCard({ row, propertyKey }) {
             
          <div className="relative">
             
-            <div className="max-h-[520px] overflow-auto pt--1">
+            <div className="max-h-[520px] overflow-auto pt--2">
             <table className="min-w-full border-separate border-spacing-y-1 text-left text-sm">
-                <thead className="sticky top-0 z-10 bg-slate-50">
+                <thead className="">
                   <tr className="border-b bg-slate-50">
                     <th className="px-4 py-3">Date</th>
                     <th className="px-4 py-3">Property</th>
