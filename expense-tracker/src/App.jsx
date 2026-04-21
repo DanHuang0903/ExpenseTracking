@@ -799,7 +799,7 @@ function CustomTooltipCard({ row, propertyKey }) {
                       onClick={() => setMobileProperty("luna")}
                       className={`px-3 py-1 rounded-full text-sm ${
                         mobileProperty === "luna"
-                          ? "bg-slate-900 text-white box-shadow"
+                          ? "bg-slate-900 text-white shadow-md"
                           : "bg-slate-200 text-slate-600"
                       }`}
                     >
@@ -809,7 +809,7 @@ function CustomTooltipCard({ row, propertyKey }) {
                       onClick={() => setMobileProperty("jefferson")}
                       className={`px-3 py-1 rounded-full text-sm ${
                         mobileProperty === "jefferson"
-                          ? "bg-slate-900 text-white"
+                          ? "bg-slate-900 text-white shadow-md"
                           : "bg-slate-200 text-slate-600"
                       }`}
                     >
