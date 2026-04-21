@@ -690,6 +690,22 @@ function CustomTooltipCard({ row, propertyKey }) {
   const isMobile = useIsMobile();
 
 
+  //清空filter
+  function resetFilters() {
+    setPropertyFilter("all");
+    setCategoryFilter("all");
+    setDateRange("all");
+    setOnlineOrder("all");
+    setBuyerFilter("all");
+    setCostBucket("any");
+    setKeyword("");
+    setSortBy("date-desc");
+    setActiveRowId(null);
+    setActiveChartPoint(null);
+    setMobileProperty("luna");
+  }
+
+
 
 /////////////////////////////////////////////
 //                  UI                     //
@@ -957,7 +973,15 @@ function CustomTooltipCard({ row, propertyKey }) {
 
           {/*Filter*/}
           <div className="mb-6 rounded-2xl bg-white p-5 shadow no-tap-highlight">
-            <h2 className="mb-4 text-lg font-semibold">Filters</h2>
+          <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold">Filters</h2>
+              <button
+                onClick={resetFilters}
+                className="rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-600 transition hover:bg-slate-100"
+              >
+                Reset
+              </button>
+            </div>
 
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
               <div>
@@ -1093,14 +1117,10 @@ function CustomTooltipCard({ row, propertyKey }) {
               </p> : <></>}
             
          <div className="relative">
-            {/* 左渐变 */}
-            <div className="pointer-events-none absolute left-0 top-0 h-full w-4 bg-gradient-to-r from-white to-transparent z-10" />
-
-            {/* 右渐变 */}
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-4 bg-gradient-to-l from-white to-transparent z-10" />
-            <div className="overflow-x-auto p-1">
+            
+            <div className="max-h-[520px] overflow-auto pt--1">
             <table className="min-w-full border-separate border-spacing-y-1 text-left text-sm">
-                <thead>
+                <thead className="sticky top-0 z-10 bg-slate-50">
                   <tr className="border-b bg-slate-50">
                     <th className="px-4 py-3">Date</th>
                     <th className="px-4 py-3">Property</th>
