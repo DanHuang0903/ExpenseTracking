@@ -1113,7 +1113,9 @@ function CustomTooltipCard({ row, propertyKey }) {
               
             </div>
             
-            
+            {isMobile ? <p className="text-xs text-slate-400 mb-2">
+              Scroll to view more ↓
+            </p> : <></>}
 
        
         <div className="max-h-[420px] overflow-y-auto space-y-3 pr-1">
