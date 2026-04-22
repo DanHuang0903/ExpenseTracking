@@ -520,7 +520,7 @@ function getBarHandlers(dataKey) {
           height={height}
           fill={fill}
           style={{
-            filter: "drop-shadow(0px -2px 5px rgba(0,0,0,0.12))",
+            filter: "drop-shadow(5px -3px 5px rgba(0,0,0,0.12))",
           }}
         />
       </g>
@@ -724,6 +724,29 @@ useEffect(() => {
     setActiveChartPoint(null);
     setMobileProperty("luna");
   }
+
+//判断是不是有添加filter
+  const hasActiveFilters = useMemo(() => {
+    return (
+      propertyFilter !== "all" ||
+      categoryFilter !== "all" ||
+      dateRange !== "all" ||
+      onlineOrder !== "all" ||
+      buyerFilter !== "all" ||
+      costBucket !== "any" ||
+      keyword.trim() !== "" ||
+      sortBy !== "date-desc"
+    );
+  }, [
+    propertyFilter,
+    categoryFilter,
+    dateRange,
+    onlineOrder,
+    buyerFilter,
+    costBucket,
+    keyword,
+    sortBy,
+  ]);
 
 
 
@@ -997,7 +1020,12 @@ useEffect(() => {
               <h2 className="text-lg font-semibold">Filters</h2>
               <button
                 onClick={resetFilters}
-                className="rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-600 transition hover:bg-slate-100"
+                disabled={!hasActiveFilters}
+                className={`rounded-full px-3 py-1 text-sm transition ${
+                  hasActiveFilters
+                    ? "bg-slate-900 text-white hover:bg-slate-800"
+                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                }`}
               >
                 Reset
               </button>
@@ -1105,12 +1133,12 @@ useEffect(() => {
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow">
-            <div className="mb-4 flex items-baseline justify-between gap-2 ">
+            <div className="mb-4 flex justify-between gap-2">
              <div className="">
               {isMobile? 
-              <div>
+              <div className="flex flex-col gap-2">
                <h2 className="text-lg font-semibold">Records</h2>
-               <button className="px-3 py-1 rounded-full text-xs bg-slate-900 text-white">{filteredData.length} records · after filters</button>
+               <button className="w-fit px-3 py-1 rounded-full text-xs bg-slate-900 text-white">{filteredData.length} records · after filters</button>
                 </div>
                 : <div className="flex items-baseline gap-2">
                 <h2 className="text-lg font-semibold">Records</h2>
@@ -1118,11 +1146,11 @@ useEffect(() => {
               </div>}
              
               </div> 
-            <div className="items-baseline">
+            <div className="self-end">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="rounded-lg border border-slate-200 px-4 py-1 text-sm text-slate-600 bg-white mb-4"
+                className="rounded-lg border border-slate-200 px-4 py-1 text-sm text-slate-600 bg-white"
               >
                 <option value="date-desc">Newest</option>
                 <option value="date-asc">Oldest</option>
@@ -1153,10 +1181,10 @@ useEffect(() => {
                 
                 className={`rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 ${
                   isActive
-                    ? "bg-slate-50 shadow-md -translate-y-[1px]"
+                    ? "bg-slate-50 shadow-md -translate-y-[2px]"
                     : isMobile
                       ? ""
-                      : "hover:shadow-md hover:-translate-y-[1px]"
+                      : "hover:shadow-md hover:-translate-y-[2px]"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
