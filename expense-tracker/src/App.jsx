@@ -881,7 +881,7 @@ useEffect(() => {
                   <div className="mb-4 flex gap-2">
                     <button
                       onClick={() => setMobileProperty("luna")}
-                      className={`px-3 py-1 rounded-full text-sm ${
+                      className={`px-3 py-1 rounded-full text-xs ${
                         mobileProperty === "luna"
                           ? "bg-slate-900 text-white shadow-md"
                           : "bg-slate-200 text-slate-600"
@@ -891,7 +891,7 @@ useEffect(() => {
                     </button>
                     <button
                       onClick={() => setMobileProperty("jefferson")}
-                      className={`px-3 py-1 rounded-full text-sm ${
+                      className={`px-3 py-1 rounded-full text-xs ${
                         mobileProperty === "jefferson"
                           ? "bg-slate-900 text-white shadow-md"
                           : "bg-slate-200 text-slate-600"
