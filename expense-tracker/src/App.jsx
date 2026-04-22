@@ -1117,8 +1117,8 @@ function CustomTooltipCard({ row, propertyKey }) {
               </p> : <></>}
             
          <div className="relative">
-            
-            <div className="max-h-[520px] overflow-x-auto overflow-y-auto pt--2">
+            <div className="overflow-x-auto">
+            <div className="max-h-[520px] overflow-y-auto overscroll-y-contain">
             <table className="min-w-full border-separate border-spacing-y-1 text-left text-sm">
                 <thead className="">
                   <tr className="border-b bg-slate-50">
@@ -1232,6 +1232,7 @@ function CustomTooltipCard({ row, propertyKey }) {
                   })}
                 </tbody>
               </table>
+            </div>
             </div>
             </div>
           </div>
