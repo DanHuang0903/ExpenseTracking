@@ -1128,8 +1128,13 @@ function CustomTooltipCard({ row, propertyKey }) {
                 onClick={() =>
                   setActiveRowId((prev) => (prev === item.id ? null : item.id))
                 }
-                className={`rounded-xl border border-slate-200 bg-white p-4 transition ${
-                  isActive ? "shadow-sm bg-slate-50" : ""
+                
+                className={`rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 ${
+                  isActive
+                    ? "bg-slate-50 shadow-md -translate-y-[1px]"
+                    : isMobile
+                      ? ""
+                      : "hover:shadow-md hover:-translate-y-[1px]"
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
