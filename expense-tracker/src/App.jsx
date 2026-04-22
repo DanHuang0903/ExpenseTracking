@@ -1147,10 +1147,10 @@ function CustomTooltipCard({ row, propertyKey }) {
 
                 <div className="mt-3 flex flex-wrap gap-2 text-xs">
                   <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
-                    {capitalize(item.category) || "-"}
+                    Category: {capitalize(item.category) || "-"}
                   </span>
                   <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
-                    Buyer: {capitalize(item.buyer)}
+                    {capitalize(item.buyer)}
                   </span>
                   <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
                     Online: {capitalize(item.onlineOrder)}
