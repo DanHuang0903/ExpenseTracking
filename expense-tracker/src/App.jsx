@@ -1115,7 +1115,7 @@ function CustomTooltipCard({ row, propertyKey }) {
             
             
 
-              {isMobile ? (
+       
         <div className="max-h-[420px] overflow-y-auto space-y-3 pr-1">
           {filteredData.map((item) => {
             const isActive = activeRowId === item.id;
@@ -1164,127 +1164,7 @@ function CustomTooltipCard({ row, propertyKey }) {
               </div>);
                   })}
                 </div>
-              ) : (
-              <div className="relative">
-                  <div className="overflow-x-auto">
-                  <div className="max-h-[520px] overflow-y-auto overscroll-y-contain">
-                  <table className="min-w-full border-separate border-spacing-y-1 text-left text-sm">
-                      <thead className="">
-                        <tr className="border-b bg-slate-50">
-                          <th className="px-4 py-3">Date</th>
-                          <th className="px-4 py-3">Property</th>
-                          <th className="px-4 py-3">Cost</th>
-                          <th className="px-4 py-3">Category</th>
-                          <th className="px-4 py-3">Content</th>
-                          <th className="px-4 py-3">Online Order</th>
-                          <th className="px-4 py-3">Carrier</th>
-                          <th className="px-4 py-3">Buyer</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                  {filteredData.map((item) => {
-                    const isActive = activeRowId === item.id;
-
-                    return (
-                      <tr
-                          key={item.id}
-                          className={`border-b transition-all duration-200 ${
-                            activeRowId === item.id
-                              ? isMobile
-                                ? "shadow-[0_12px_32px_rgba(15,23,42,0.18)] bg-slate-50 scale-[1.01]"
-                                : "shadow-md bg-white -translate-y-[1px] relative z-10"
-                              : !isMobile
-                                ? "hover:shadow-sm hover:-translate-y-[0.5px]"
-                                : ""
-                          }`}
-                          onMouseEnter={() => setActiveRowId(item.id)}
-                          onMouseLeave={() => setActiveRowId(null)}
-                          onClick={() =>
-                            setActiveRowId((prev) => (prev === item.id ? null : item.id))
-                          }
-                        >
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {item.date ? formatDateShort(item.date) : "-"}
-                        </td>
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {capitalize(item.property)}
-                        </td>
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {formatCurrency(item.cost)}
-                        </td>
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {capitalize(item.category) || "-"}
-                        </td>
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {item.content || "-"}
-                        </td>
-                        
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {capitalize(item.onlineOrder)}
-                        </td>
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {item.carrier || "-"}
-                        </td>
-                        <td
-                          className={`px-4 py-3 transition-colors duration-150 ${
-                            activeRowId === item.id
-                              ? "text-slate-550"
-                              : "text-slate-500"
-                          }`}
-                        >
-                          {capitalize(item.buyer)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            </div>
-            </div>
-          )}  
+              
          
           </div>
         </>
