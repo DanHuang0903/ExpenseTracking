@@ -748,6 +748,31 @@ useEffect(() => {
     sortBy,
   ]);
 
+//track加了几个filter
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+  
+    if (propertyFilter !== "all") count++;
+    if (categoryFilter !== "all") count++;
+    if (dateRange !== "all") count++;
+    if (onlineOrder !== "all") count++;
+    if (buyerFilter !== "all") count++;
+    if (costBucket !== "any") count++;
+    if (keyword.trim() !== "") count++;
+    if (sortBy !== "date-desc") count++;
+  
+    return count;
+  }, [
+    propertyFilter,
+    categoryFilter,
+    dateRange,
+    onlineOrder,
+    buyerFilter,
+    costBucket,
+    keyword,
+    sortBy,
+  ]);
+
 
 
 /////////////////////////////////////////////
@@ -1016,20 +1041,21 @@ useEffect(() => {
 
           {/*Filter*/}
           <div className="mb-6 rounded-2xl bg-white p-5 shadow no-tap-highlight">
-          <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="text-lg font-semibold">Filters</h2>
-              <button
-                onClick={resetFilters}
-                disabled={!hasActiveFilters}
-                className={`rounded-full px-3 py-1 text-sm transition ${
-                  hasActiveFilters
-                    ? "bg-slate-900 text-white hover:bg-slate-800"
-                    : "bg-slate-200 text-slate-400 cursor-not-allowed"
-                }`}
-              >
-                Reset
-              </button>
-            </div>
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">Filters</h2>
+
+            <button
+              onClick={resetFilters}
+              disabled={!hasActiveFilters}
+              className={`mt-2 rounded-full px-3 py-1 text-xs transition ${
+                hasActiveFilters
+                  ? "bg-slate-900 text-white hover:bg-slate-800"
+                  : "bg-slate-200 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              Reset {activeFilterCount > 0 && ` · ${activeFilterCount} fitler(s)`}
+            </button>
+          </div>
 
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
               <div>
