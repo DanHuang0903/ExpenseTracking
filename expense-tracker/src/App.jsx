@@ -1116,6 +1116,57 @@ function CustomTooltipCard({ row, propertyKey }) {
                 ← Swipe to view more →
               </p> : <></>}
             
+
+              {isMobile ? (
+  <div className="space-y-3">
+    {filteredData.map((item) => {
+      const isActive = activeRowId === item.id;
+
+      return (
+        <div
+          key={item.id}
+          onClick={() =>
+            setActiveRowId((prev) => (prev === item.id ? null : item.id))
+          }
+          className={`rounded-xl border border-slate-200 bg-white p-4 transition ${
+            isActive ? "shadow-sm bg-slate-50" : ""
+          }`}
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="text-sm font-semibold text-slate-800">
+                {item.content || "No content"}
+              </div>
+              <div className="mt-1 text-xs text-slate-500">
+                {item.date ? formatDateShort(item.date) : "-"} · {capitalize(item.property)}
+              </div>
+            </div>
+
+            <div className="shrink-0 text-sm font-semibold text-slate-900">
+              {formatCurrency(item.cost)}
+            </div>
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
+              {capitalize(item.category) || "-"}
+            </span>
+            <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
+              Buyer: {capitalize(item.buyer)}
+            </span>
+            <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
+              Online: {capitalize(item.onlineOrder)}
+            </span>
+            {item.carrier && (
+              <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">
+                {item.carrier}
+              </span>
+            )}
+          </div>
+        </div>);
+            })}
+          </div>
+        ) : (
          <div className="relative">
             <div className="overflow-x-auto">
             <div className="max-h-[520px] overflow-y-auto overscroll-y-contain">
@@ -1235,6 +1286,8 @@ function CustomTooltipCard({ row, propertyKey }) {
             </div>
             </div>
             </div>
+          )}  
+         
           </div>
         </>
       )}
