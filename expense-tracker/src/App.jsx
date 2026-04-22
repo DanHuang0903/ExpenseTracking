@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -141,6 +141,9 @@ export default function App() {
   const [keyword, setKeyword] = useState("");
   const [sortBy, setSortBy] = useState("date-desc");
   const [mobileProperty, setMobileProperty] = useState("luna");
+
+  const listRef = useRef(null);
+  const [hasOverflow, setHasOverflow] = useState(false);
 
 const [activeChartPoint, setActiveChartPoint] = useState(null);
 
@@ -594,6 +597,23 @@ function CustomTooltipCard({ row, propertyKey }) {
     </div>
   );
 }
+
+
+useEffect(() => {
+  const el = listRef.current;
+  if (!el) return;
+
+  const checkOverflow = () => {
+    setHasOverflow(el.scrollHeight > el.clientHeight);
+  };
+
+  checkOverflow();
+
+  // 窗口变化时也重新检测
+  window.addEventListener("resize", checkOverflow);
+  return () => window.removeEventListener("resize", checkOverflow);
+}, [filteredData]);
+
   // function CustomTooltip({ active, payload, label, chartData }) {
   //   if (!active || !payload || payload.length === 0) return null;
   
@@ -1113,12 +1133,14 @@ function CustomTooltipCard({ row, propertyKey }) {
               
             </div>
             
-            {isMobile ? <p className="text-xs text-slate-400 mb-2">
-              Scroll to view more ↓
-            </p> : <></>}
+            {isMobile && hasOverflow && (
+                <p className="text-xs text-slate-400 mb-2">
+                  Scroll to view more ↓
+                </p>
+              )}
 
        
-        <div className="max-h-[420px] overflow-y-auto space-y-3 pr-1">
+        <div ref={listRef} className="max-h-[420px] overflow-y-auto space-y-3 pr-1">
           {filteredData.map((item) => {
             const isActive = activeRowId === item.id;
 
